@@ -8,8 +8,6 @@ const app = express();
 app.get('/api/topics', getTopics);
 
 
-
-app.use(serverError);
 app.use(pathError);
 
 module.exports = app;
