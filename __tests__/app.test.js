@@ -14,6 +14,7 @@ describe('app', () => {
             expect(msg).toBe("Path Not Found");
         })
     })
+    
 })
 
 describe('/api/topics', () => {
@@ -29,6 +30,37 @@ describe('/api/topics', () => {
                         })
                     )
                 })
+            })
+        })
+    })
+})
+
+describe('/api/articles/', () => {
+    describe('GET', () => {
+        test('Status: 200 - when passed an article_id responds with a single corresponding article object', () => {
+            const id = 2;
+            return request(app).get(`/api/articles/${id}`).expect(200).then(({ body: { article }}) => {
+                expect(article).toEqual(
+                    expect.objectContaining({
+                    article_id: id,
+                    title: expect.any(String),
+                    topic: expect.any(String),
+                    author: expect.any(String),
+                    body: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number)
+                })
+                )
+            })     
+        })
+        test('Status: 404 - responds with error msg for VALID but Non-existent article_id', () => {
+            return request(app).get('/api/articles/9999999').expect(404).then(({body: {msg}}) => {
+                expect(msg).toBe("Article Not Found");
+            })
+        })
+        test('status: 400 - reponse with err msg for invalid article_id', () => {
+            return request(app).get("/api/articles/not-an-id").expect(400).then(({ body: { msg } }) => {
+                expect(msg).toBe("Bad Request");
             })
         })
     })
