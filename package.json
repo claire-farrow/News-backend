@@ -28,7 +28,9 @@
     "pg-format": "^1.0.4"
   },
   "dependencies": {
-    "pg": "^8.7.3"
+    "express": "^4.17.2",
+    "pg": "^8.7.3",
+    "supertest": "^6.2.2"
   },
   "jest": {
     "setupFilesAfterEnv": [
