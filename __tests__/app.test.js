@@ -70,9 +70,19 @@ describe('/api/articles/', () => {
                         })
                       );
                 })
-                
               });
           });
+        
+          test('Status 200: Articles are sorted-by date in descending order', () => {
+            return request(app)
+            .get("/api/articles")
+            .expect(200)
+            .then(({ body: { articles } }) => {
+                expect(articles).toBeSortedBy("created_at", {
+                    descending: true
+                })
+            })
+          })
       
 
         test('Status: 404 - responds with error msg for VALID but Non-existent article_id', () => {
