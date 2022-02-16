@@ -1,4 +1,8 @@
-const { getTopics, getArticleById, patchArticleById, getUsers } = require('./controllers/topics.controllers');
+const { getTopics } = require('./controllers/topics.controllers');
+
+const { getArticleById, patchArticleById } = require('./controllers/articles.controllers');
+
+const { getUsers } = require('./controllers/users.controllers');
 
 const { pathError, handleCustomErrors, handlePsqlErrors, handle500Errors } = require('./controllers/error-controllers');
 

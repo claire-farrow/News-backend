@@ -1,7 +1,7 @@
 const db = require('../db/connection');
 
-exports.fetchTopics = () => {
-    return db.query('SELECT * FROM topics;')
+exports.fetchUsers = () => {
+    return db.query('SELECT username FROM users;')
     .then(({rows}) => {
         return rows;
     })
