@@ -1,6 +1,6 @@
 const { getTopics, getArticleById, patchArticleById } = require('./controllers/topics.controllers');
 
-const { pathError, handleCustomErrors, handlePsqlErrors } = require('./controllers/error-controllers');
+const { pathError, handleCustomErrors, handlePsqlErrors, handle500Errors } = require('./controllers/error-controllers');
 
 const express = require('express');
 
@@ -15,5 +15,6 @@ app.patch('/api/articles/:article_id', patchArticleById);
 app.use(handleCustomErrors);
 app.use(handlePsqlErrors);
 app.use(pathError);
+app.use(handle500Errors);
 
 module.exports = app;
