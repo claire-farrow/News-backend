@@ -125,3 +125,19 @@ describe('/api/articles/', () => {
     })
 })
 })
+
+describe('/api/users', () => {
+    describe('GET', () => {
+        test('Status: 200 - responds with an array of objects with the property username', () => {
+            return request(app).get('/api/users').expect(200)
+            .then(({ body: { users } }) => {
+                expect(users).toHaveLength(4);
+                users.forEach((user) => {
+                    expect(user).toEqual(expect.objectContaining({
+                        username: expect.any(String)
+                    }))
+                })
+            })
+        })
+    })
+})
