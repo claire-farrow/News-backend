@@ -53,6 +53,28 @@ describe('/api/articles/', () => {
             })     
         })
 
+        test("Status: 200 - responds with array of article ojects", () => {
+            return request(app)
+              .get("/api/articles")
+              .expect(200)
+              .then(({ body: { articles } }) => {
+                articles.forEach((article) => {
+                    expect(article).toEqual(
+                        expect.objectContaining({
+                          article_id: expect.any(Number),
+                          title: expect.any(String),
+                          topic: expect.any(String),
+                          author: expect.any(String),
+                          created_at: expect.any(String),
+                          votes: expect.any(Number)
+                        })
+                      );
+                })
+                
+              });
+          });
+      
+
         test('Status: 404 - responds with error msg for VALID but Non-existent article_id', () => {
             return request(app).get('/api/articles/9999999').expect(404).then(({body: {msg}}) => {
                 expect(msg).toBe("Article Not Found");
