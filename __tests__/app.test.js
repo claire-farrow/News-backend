@@ -64,6 +64,7 @@ describe('/api/articles/', () => {
             })
         })
     })
+
     describe('PATCH', () => {
         test('Status: 200 - accept an object of inc_votes which increments vote by a positive number', () => {
             const positiveVote = {inc_votes: 1};
@@ -78,11 +79,9 @@ describe('/api/articles/', () => {
                         body: expect.any(String),
                         created_at: expect.any(String),
                         votes: 1
-                    })
-              )
+                    }))
             })
         })
-    
     test('Status: 200 - accept an object of inc_votes which decrements vote by a negative number', () => {
         const negativeVote = {inc_votes: -100};
         return request(app).patch(`/api/articles/4`).send(negativeVote).expect(200)
@@ -100,11 +99,28 @@ describe('/api/articles/', () => {
         })
         
     })
-
     test('status: 400 - reponse with err msg for invalid inc_vote request', () => {
         const invalidVote = {inc_votes: NaN}
         return request(app).patch("/api/articles/3").send(invalidVote).expect(400).then(({ body: { msg } }) => {
             expect(msg).toBe("Bad Request");
+        })
+    })
+    test('status: 400 - reponse with err msg inc_vote spelt wrong but with VALID number', () => {
+        const invalidVote = {inc_voes: 3}
+        return request(app).patch("/api/articles/3").send(invalidVote).expect(400).then(({ body: { msg } }) => {
+            expect(msg).toBe("Bad Request");
+        })
+    })
+    test('status: 400 - reponse with err msg when extra key is added to the inc_vote request', () => {
+        const invalidVote = {inc_votes: 3, title: 'invalid'}
+        return request(app).patch("/api/articles/3").send(invalidVote).expect(400).then(({ body: { msg } }) => {
+            expect(msg).toBe("Bad Request");
+        })
+    })
+    test('Status: 404 - responds with error msg for VALID but Non-existent article_id', () => {
+        const validVote = {inc_votes: 5}
+        return request(app).patch('/api/articles/9999999').send(validVote).expect(404).then(({body: {msg}}) => {
+            expect(msg).toBe("Article Not Found");
         })
     })
 })
