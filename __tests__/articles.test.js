@@ -1,10 +1,7 @@
 const request = require('supertest');
 const app = require('../app');
-const seed = require('../db/seeds/seed');
 const data = require('../db/data/test-data');
 const db = require('../db/connection');
-
-beforeEach(() => seed(data));
 
 afterAll(() => db.end());
 
@@ -26,6 +23,7 @@ describe('/api/articles/', () => {
                 )
             })     
         })
+
         test('Status: 404 - responds with error msg for VALID but Non-existent article_id', () => {
             return request(app).get('/api/articles/9999999').expect(404).then(({body: {msg}}) => {
                 expect(msg).toBe("Article Not Found");
@@ -88,12 +86,6 @@ describe('/api/articles/', () => {
         const invalidVote = {inc_votes: 3, title: 'invalid'}
         return request(app).patch("/api/articles/3").send(invalidVote).expect(400).then(({ body: { msg } }) => {
             expect(msg).toBe("Bad Request");
-        })
-    })
-    test('Status: 404 - responds with error msg for VALID but Non-existent article_id', () => {
-        const validVote = {inc_votes: 5}
-        return request(app).patch('/api/articles/9999999').send(validVote).expect(404).then(({body: {msg}}) => {
-            expect(msg).toBe("Article Not Found");
         })
     })
 })

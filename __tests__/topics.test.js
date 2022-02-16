@@ -1,10 +1,7 @@
 const request = require('supertest');
 const app = require('../app');
-const seed = require('../db/seeds/seed');
 const data = require('../db/data/test-data');
 const db = require('../db/connection');
-
-beforeEach(() => seed(data));
 
 afterAll(() => db.end());
 
