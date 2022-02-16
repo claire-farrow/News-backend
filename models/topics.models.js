@@ -1,7 +1,7 @@
 const db = require('../db/connection');
 
 exports.fetchTopics = () => {
-    return db.query('SELECT * FROM topics')
+    return db.query('SELECT * FROM topics;')
     .then(({rows}) => {
         return rows;
     })
@@ -29,5 +29,12 @@ exports.updateArticleById = (article_id, newVote) => {
             return Promise.reject({status: 404, msg: "Article Not Found"});
        }
         return rows[0];
+    })
+}
+
+exports.fetchUsers = () => {
+    return db.query('SELECT username FROM users;')
+    .then(({rows}) => {
+        return rows;
     })
 }
