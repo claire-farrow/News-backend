@@ -140,9 +140,6 @@ describe("/api/articles/", () => {
         });
     });
   });
-
-
-    
   
     describe("PATCH", () => {
       test("Status: 200 - accept an object of inc_votes which increments vote by a positive number", () => {
@@ -216,6 +213,30 @@ describe("/api/articles/", () => {
           });
       });
     });
+
+    describe("POST", () => {
+      test('Status: 201 - when passed username and body posts a new comment', () => {
+        const id = 1;
+        const newComment = {
+          username: 'lurker',
+          body: 'some words'
+        };
+        return request(app).post(`/api/articles/${id}/comments`).expect(201).send(newComment).then(({body}) => {
+          expect(body.comment).toEqual(expect.objectContaining({
+            comment_id: expect.any(Number),
+            body: 'some words',
+            votes: expect.any(Number),
+            author: 'lurker',   
+            created_at: expect.any(String)
+          }))
+        })
+        })
+        test('Status: 400 - responds with an error msg for invalid_user name', () => {
+          return request(app).post('/api/articles/:article_id/comments').expect(400).then(({ body: { msg } }) => {
+            expect(msg).toBe("Bad Request");
+          });
+        })
+      })
   });
 
   
@@ -239,4 +260,6 @@ describe("/api/users", () => {
     });
   });
 });
+
+
 

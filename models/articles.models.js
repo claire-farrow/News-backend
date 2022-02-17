@@ -1,15 +1,21 @@
 const db = require("../db/connection");
 
 exports.fetchArticles = () => {
-  return db.query('SELECT article_id, title, topic, author, created_at, votes FROM articles ORDER BY created_at DESC;')
-  .then(({rows}) => {
-    return rows;
-  })
-}
+  return db
+    .query(
+      "SELECT article_id, title, topic, author, created_at, votes FROM articles ORDER BY created_at DESC;"
+    )
+    .then(({ rows }) => {
+      return rows;
+    });
+};
 
 exports.fetchArticleById = (id) => {
   return db
-    .query("SELECT articles.*, COUNT(comments.comment_id) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id WHERE articles.article_id = $1 GROUP BY articles.article_id;", [id])
+    .query(
+      "SELECT articles.*, COUNT(comments.comment_id) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id WHERE articles.article_id = $1 GROUP BY articles.article_id;",
+      [id]
+    )
     .then(({ rows }) => {
       if (rows.length === 0) {
         return Promise.reject({ status: 404, msg: "Article Not Found" });
@@ -19,11 +25,12 @@ exports.fetchArticleById = (id) => {
 };
 
 exports.fetchCommentsByArticleId = (id) => {
-  return db.query('SELECT * FROM comments WHERE article_id = $1;', [id])
-  .then(({rows}) => {
-    return rows[0];
-  }) 
-}
+  return db
+    .query("SELECT * FROM comments WHERE article_id = $1;", [id])
+    .then(({ rows }) => {
+      return rows[0];
+    });
+};
 
 exports.updateArticleById = (article_id, newVote) => {
   const { inc_votes } = newVote;
@@ -44,7 +51,17 @@ exports.updateArticleById = (article_id, newVote) => {
     });
 };
 
-exports.createArticleByComment = (newComment) => {
+exports.createCommentByArticleId = (newComment, id) => {
   const { username, body } = newComment;
-  return db.query('INSERT INTO articles')
-}
+  return db
+    .query(
+      "INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *;",
+      [username, body, id]
+    )
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        return Promise.reject({ status: 400, msg: "Bad Request" });
+      }
+      return rows[0];
+    });
+};

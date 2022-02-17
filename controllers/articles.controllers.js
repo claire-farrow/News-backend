@@ -2,7 +2,8 @@ const {
   fetchArticles,
   fetchArticleById,
   fetchCommentsByArticleId,
-  updateArticleById
+  updateArticleById,
+  createCommentByArticleId
 } = require("../models/articles.models");
 
 exports.getArticles = (req, res, next) => {
@@ -41,10 +42,11 @@ exports.patchArticleById = (req, res, next) => {
     .catch(next);
 };
 
-exports.postArticleByUserComment = (req, res, next) => {
+exports.postCommentByArticleId = (req, res, next) => {
   const newComment = req.body;
-  createArticleByComment(newComment).then((article) => {
-    res.status(201).send({article})
+  const id = req.params.article_id;
+  createCommentByArticleId(newComment, id).then((comment) => {
+    res.status(201).send({comment});
   })
   .catch(next);
 }
