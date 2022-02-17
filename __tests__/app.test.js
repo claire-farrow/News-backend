@@ -91,6 +91,32 @@ describe("/api/articles/", () => {
           expect(articles).toBeSortedBy("created_at", {
             descending: true,
           });
+
+        
+          test('Status 200: Articles are sorted-by date in descending order', () => {
+            return request(app)
+            .get("/api/articles")
+            .expect(200)
+            .then(({ body: { articles } }) => {
+                expect(articles).toBeSortedBy("created_at", {
+                    descending: true
+                })
+            })
+          })
+      
+          test('Status: 200 - Returns an array of comments for the given article_id', () => {
+            const id = 3
+            return request(app).get(`/api/articles/${id}/comments`).expect(200).then(({ body: { comments } }) => {
+              expect(comments).toEqual(expect.objectContaining({
+                article_id: id,
+                comment_id: expect.any(Number),
+                votes: expect.any(Number),
+                created_at: expect.any(String),
+                author: expect.any(String),
+                body: expect.any(String)
+              }))
+            })
+          })
         });
     });
 
@@ -205,3 +231,4 @@ describe("/api/users", () => {
     });
   });
 });
+
