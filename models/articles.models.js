@@ -36,3 +36,8 @@ exports.updateArticleById = (article_id, newVote) => {
       return rows[0];
     });
 };
+
+exports.createArticleByComment = (newComment) => {
+  const { username, body } = newComment;
+  return db.query('INSERT INTO articles')
+}
