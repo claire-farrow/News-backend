@@ -150,6 +150,21 @@ describe('/api/articles/', () => {
         })
     })
 })
+
+  describe('POST', () => {
+    test('Status: 201 - request accepts username and body', () => {
+      const newComment = {
+        username: 'lurker',
+        body: 'Some words'
+      };
+      return request(app).post(`/api/articles/${article_id}/comments`).send(newComment).expect(201).then(({body}) => {
+        expect(body.article).toEqual({
+          article_id: expect.any(Number),
+          ...newComment
+        })
+      })
+    })
+  })
 })
 
 describe('/api/users', () => {
