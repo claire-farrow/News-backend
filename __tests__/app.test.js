@@ -84,6 +84,19 @@ describe('/api/articles/', () => {
             })
           })
       
+          test('Status: 200 - Returns an array of comments for the given article_id', () => {
+            const id = 3
+            return request(app).get(`/api/articles/${id}/comments`).expect(200).then(({ body: { comments } }) => {
+              expect(comments).toEqual(expect.objectContaining({
+                article_id: id,
+                comment_id: expect.any(Number),
+                votes: expect.any(Number),
+                created_at: expect.any(String),
+                author: expect.any(String),
+                body: expect.any(String)
+              }))
+            })
+          })
 
         test('Status: 404 - responds with error msg for VALID but Non-existent article_id', () => {
             return request(app).get('/api/articles/9999999').expect(404).then(({body: {msg}}) => {
@@ -167,3 +180,4 @@ describe('/api/users', () => {
         })
     })
 })
+

@@ -18,6 +18,13 @@ exports.fetchArticleById = (id) => {
     });
 };
 
+exports.fetchCommentsByArticleId = (id) => {
+  return db.query('SELECT * FROM comments WHERE article_id = $1;', [id])
+  .then(({rows}) => {
+    return rows[0];
+  }) 
+}
+
 exports.updateArticleById = (article_id, newVote) => {
   const { inc_votes } = newVote;
   const newVoteKeys = Object.keys(newVote).pop("inc_votes");
