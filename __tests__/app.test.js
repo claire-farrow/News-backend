@@ -83,20 +83,6 @@ describe("/api/articles/", () => {
         });
     });
 
-    test("Status 200: Articles are sorted-by date in descending order", () => {
-      return request(app)
-        .get("/api/articles")
-        .expect(200)
-        .then(({ body: { articles } }) => {
-          expect(articles).toBeSortedBy("created_at", {
-            descending: true,
-          });
-        })
-    })
-
-
-        
-          
     test('Status 200: Articles are sorted-by date in descending order', () => {     
       return request(app)   
       .get("/api/articles")    
@@ -108,7 +94,6 @@ describe("/api/articles/", () => {
       })   
     })
       
-          
     test('Status: 200 - Returns an array of comments for the given article_id', () => {   
       const id = 3   
       return request(app).get(`/api/articles/${id}/comments`).expect(200).then(({ body: { comments } }) => {     
@@ -260,6 +245,15 @@ describe("/api/users", () => {
     });
   });
 });
+
+describe('/api/comments', () => {
+  describe("DELETE", () => {
+    test("Status 204 - Delete comment entry by comment_id", () => {
+      const id = 2;
+      return request(app).delete(`/api/comments/${id}`).expect(204)
+    })
+  })
+})
 
 
 
