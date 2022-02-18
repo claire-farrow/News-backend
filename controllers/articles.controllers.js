@@ -3,15 +3,19 @@ const {
   fetchArticleById,
   fetchCommentsByArticleId,
   updateArticleById,
-  createCommentByArticleId
+  createCommentByArticleId,
 } = require("../models/articles.models");
 
 exports.getArticles = (req, res, next) => {
-  fetchArticles()
+  const {sort_by, topic} = req.query;
+  console.log(topic);
+  fetchArticles(sort_by, topic)
     .then((articles) => {
       res.status(200).send({ articles });
     })
     .catch(next);
+
+    
 };
 
 exports.getArticleById = (req, res, next) => {
