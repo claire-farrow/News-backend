@@ -250,7 +250,7 @@ describe('/api/comments', () => {
   describe("DELETE", () => {
     test("Status 204 - Delete comment entry by comment_id", () => {
       const id = 2;
-      return request(app).delete(`/api/comments/${id}`).expect(204);
+      return request(app).delete(`/api/comments/${id}`).expect(204)
     })
   })
 })
