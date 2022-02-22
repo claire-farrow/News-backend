@@ -1,15 +1,28 @@
 const db = require("../db/connection");
 
-exports.fetchArticles = () => {
+exports.fetchArticles = (sort_by = "created_at", topic) => {
+  console.log(topic);
+  const validSortBy = ["created_at", "title", "topic", "author", "votes"];
+  if(!validSortBy.includes(sort_by)) {
+    return Promise.reject({ status: 400, msg: "Bad Request" });
+  }
+  
+  let queryArticle = `SELECT * FROM articles `
+
+  const queryValues = [];
+  if(topic) {
+    queryArticle += `WHERE topic = $1 `
+    queryValues.push(topic);
+  }
+  
+  queryArticle += `ORDER BY ${sort_by} DESC;`, [topic];
+
   return db
-    .query(
-     `SELECT article_id, title, topic, author, created_at, votes 
-     FROM articles
-    ORDER BY created_at DESC;`
-    )
+    .query(queryArticle, queryValues)
     .then(({ rows }) => {
       return rows;
     });
+
 };
 
 exports.fetchArticleById = (id) => {
@@ -73,3 +86,5 @@ exports.createCommentByArticleId = (newComment, id) => {
       return rows[0];
     });
 };
+
+

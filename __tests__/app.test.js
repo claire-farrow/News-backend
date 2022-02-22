@@ -82,17 +82,6 @@ describe("/api/articles/", () => {
           });
         });
     });
-
-    test('Status 200: Articles are sorted-by date in descending order', () => {     
-      return request(app)   
-      .get("/api/articles")    
-      .expect(200)     
-      .then(({ body: { articles } }) => {      
-        expect(articles).toBeSortedBy("created_at", {          
-          descending: true       
-        })      
-      })   
-    })
       
     test('Status: 200 - Returns an array of comments for the given article_id', () => {   
       const id = 3   
@@ -124,6 +113,25 @@ describe("/api/articles/", () => {
           expect(msg).toBe("Bad Request");
         });
     });
+
+    test('Status: 200 - articles accepts sort_by query with default date', () => {
+      return request(app).get('/api/articles?sort_by=created_at').expect(200).then(({body: {articles}}) => {
+        expect(articles).toBeSortedBy("created_at", {
+          descending: true
+        });
+      })
+    })
+    test('Status: 400 - for invalid sort_by query', () => {
+      return request(app).get('/api/articles?sort_by=invalid_query').expect(400).then(({body: {msg}}) => {
+        expect(msg).toBe("Bad Request");
+      })
+    })
+
+    test('Status: 200 - articles accepts filter by topic', () => {
+      return request(app).get('/api/articles?topic=cats').expect(200).then(({body: {articles}}) => {
+        expect(articles).toHaveLength(1);
+      })
+    })
   });
   
     describe("PATCH", () => {
