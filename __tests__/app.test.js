@@ -164,7 +164,7 @@ describe("GET /api/articles/:article_id", () => {
     });
   });
 
-  describe("GET /api/articles?topic=quert", () => {
+  describe("GET /api/articles?topic=query", () => {
     test("Status: 200 - articles accepts filter by topic", () => {
       return request(app)
         .get("/api/articles?topic=cats")
