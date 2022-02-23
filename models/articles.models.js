@@ -1,12 +1,18 @@
 const db = require("../db/connection");
 
-exports.fetchArticles = (sort_by = "created_at", topic) => {
-  console.log(topic);
+exports.fetchArticles = (sort_by = "created_at", order = "desc", topic) => {
+  
   const validSortBy = ["created_at", "title", "topic", "author", "votes"];
   if(!validSortBy.includes(sort_by)) {
     return Promise.reject({ status: 400, msg: "Bad Request" });
   }
+
+  if(!["asc", "desc"].includes(order)) {
+    return Promise.reject({ status: 400, msg: "Bad Request" });
+  }
   
+  
+
   let queryArticle = `SELECT * FROM articles `
 
   const queryValues = [];
@@ -15,11 +21,15 @@ exports.fetchArticles = (sort_by = "created_at", topic) => {
     queryValues.push(topic);
   }
   
-  queryArticle += `ORDER BY ${sort_by} DESC;`, [topic];
+  queryArticle += `ORDER BY ${sort_by} ${order};`;
+  console.log(queryArticle);
 
   return db
     .query(queryArticle, queryValues)
     .then(({ rows }) => {
+      if (rows.length === 0) {
+        return Promise.reject({ status: 404, msg: "Topic Not Found" });
+      }
       return rows;
     });
 

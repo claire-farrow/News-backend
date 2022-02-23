@@ -127,12 +127,32 @@ describe("/api/articles/", () => {
       })
     })
 
+    test('Status: 200 - articles accept order with default descending', () => {
+      return request(app).get('/api/articles?order=desc').expect(200).then(({body: {articles}}) => {
+        expect(articles).toBeSorted("desc", {
+          descending: true
+        })
+      })
+    })
+
+    test('Status: 400 - for invalid order query', () => {
+      return request(app).get('/api/articles?order=invalid_query').expect(400).then(({body: {msg}}) => {
+        expect(msg).toBe("Bad Request");
+      })
+    })
+
     test('Status: 200 - articles accepts filter by topic', () => {
       return request(app).get('/api/articles?topic=cats').expect(200).then(({body: {articles}}) => {
         expect(articles).toHaveLength(1);
       })
     })
   });
+
+    test("Status: 404 - responds with error msg for invalid topic request", () => {
+      return request(app).get('/api/articles?topic=invalid-query').expect(404).then(({body: {msg}}) => {
+      expect(msg).toBe("Topic Not Found");
+      })
+    })
   
     describe("PATCH", () => {
       test("Status: 200 - accept an object of inc_votes which increments vote by a positive number", () => {
