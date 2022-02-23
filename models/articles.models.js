@@ -1,38 +1,32 @@
 const db = require("../db/connection");
 
 exports.fetchArticles = (sort_by = "created_at", order = "desc", topic) => {
-  
   const validSortBy = ["created_at", "title", "topic", "author", "votes"];
-  if(!validSortBy.includes(sort_by)) {
+  if (!validSortBy.includes(sort_by)) {
     return Promise.reject({ status: 400, msg: "Bad Request" });
   }
 
-  if(!["asc", "desc"].includes(order)) {
+  if (!["asc", "desc"].includes(order)) {
     return Promise.reject({ status: 400, msg: "Bad Request" });
   }
-  
-  
 
-  let queryArticle = `SELECT * FROM articles `
+  let queryArticle = `SELECT * FROM articles `;
 
   const queryValues = [];
-  if(topic) {
-    queryArticle += `WHERE topic = $1 `
+  if (topic) {
+    queryArticle += `WHERE topic = $1 `;
     queryValues.push(topic);
   }
-  
+
   queryArticle += `ORDER BY ${sort_by} ${order};`;
   console.log(queryArticle);
 
-  return db
-    .query(queryArticle, queryValues)
-    .then(({ rows }) => {
-      if (rows.length === 0) {
-        return Promise.reject({ status: 404, msg: "Topic Not Found" });
-      }
-      return rows;
-    });
-
+  return db.query(queryArticle, queryValues).then(({ rows }) => {
+    if (rows.length === 0) {
+      return Promise.reject({ status: 404, msg: "Topic Not Found" });
+    }
+    return rows;
+  });
 };
 
 exports.fetchArticleById = (id) => {
@@ -55,14 +49,6 @@ exports.fetchArticleById = (id) => {
     });
 };
 
-exports.fetchCommentsByArticleId = (id) => {
-  return db
-    .query("SELECT * FROM comments WHERE article_id = $1;", [id])
-    .then(({ rows }) => {
-      return rows[0];
-    });
-};
-
 exports.updateArticleById = (article_id, newVote) => {
   const { inc_votes } = newVote;
   const newVoteKeys = Object.keys(newVote).pop("inc_votes");
@@ -81,20 +67,3 @@ exports.updateArticleById = (article_id, newVote) => {
       return rows[0];
     });
 };
-
-exports.createCommentByArticleId = (newComment, id) => {
-  const { username, body } = newComment;
-  return db
-    .query(
-      "INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *;",
-      [username, body, id]
-    )
-    .then(({ rows }) => {
-      if (rows.length === 0) {
-        return Promise.reject({ status: 400, msg: "Bad Request" });
-      }
-      return rows[0];
-    });
-};
-
-

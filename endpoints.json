@@ -4,9 +4,18 @@
   },
   "GET /api/topics": {
     "description": "serves an array of all topics",
-    "queries": [],
+    "queries": ["slug", "description"],
     "exampleResponse": {
       "topics": [{ "slug": "football", "description": "Footie!" }]
+    }
+  },
+  "GET /api/users": {
+    "description": "serves an array of all users",
+    "queries": ["username", "name", "avatar_url"],
+    "exampleResponse": {
+      "topics": [{ "username": "rogersop",
+        "name": "paul",
+        "avatar_url": "https://avatars2.githubusercontent.com/u/24394918?s=400&v=4"}]
     }
   },
   "GET /api/articles": {
@@ -20,6 +29,21 @@
           "author": "weegembump",
           "body": "Text from the article..",
           "created_at": 1527695953341
+        }
+      ]
+    }
+  },
+  "GET /api/comments": {
+    "description": "serves an array of all comments",
+    "queries": ["author", "article_id", "votes"],
+    "exampleResponse": {
+      "articles": [
+        {
+          "body": "Lobster pot",
+          "votes": 0,
+          "author": "icellusedkars",
+          "article_id":  1,
+          "created_at": 1589577540000
         }
       ]
     }

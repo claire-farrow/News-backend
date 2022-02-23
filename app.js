@@ -1,11 +1,10 @@
 const { getTopics } = require("./controllers/topics.controllers");
 
 const {
-    getArticles,
+  getArticles,
   getArticleById,
-  getCommentByArticleId,
+
   patchArticleById,
-  postCommentByArticleId
 } = require("./controllers/articles.controllers");
 
 const { getUsers } = require("./controllers/users.controllers");
@@ -17,7 +16,11 @@ const {
   handle500Errors,
 } = require("./controllers/error-controllers");
 
-const {deleteCommentById} = require("./controllers/comments.controllers");
+const {
+  getCommentByArticleId,
+  postCommentByArticleId,
+  deleteCommentById,
+} = require("./controllers/comments.controllers");
 
 const express = require("express");
 
@@ -28,16 +31,15 @@ app.get("/api/topics", getTopics);
 
 app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id", getArticleById);
-app.get("/api/articles/:article_id/comments", getCommentByArticleId);
+
 app.patch("/api/articles/:article_id", patchArticleById);
 app.post("/api/articles/:article_id/comments", postCommentByArticleId);
 
-
-
 app.get("/api/users", getUsers);
 
+app.get("/api/articles/:article_id/comments", getCommentByArticleId);
+app.post("/api/articles/:article_id/comments", postCommentByArticleId);
 app.delete("/api/comments/:comment_id", deleteCommentById);
-
 
 app.use(handleCustomErrors);
 app.use(handlePsqlErrors);
