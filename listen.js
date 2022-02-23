@@ -1,4 +1,4 @@
-const { append } = require("express/lib/response");
+const { app } = require("./app");
 
 const {PORT = 9090} = process.env;
 
