@@ -1,3 +1,11 @@
+const express = require("express");
+const app = express();
+app.use(express.json());
+
+const cors = require('cors');
+app.use(cors());
+
+
 const { getTopics } = require("./controllers/topics.controllers");
 
 const {
@@ -22,10 +30,11 @@ const {
   deleteCommentById,
 } = require("./controllers/comments.controllers");
 
-const express = require("express");
 
-const app = express();
-app.use(express.json());
+
+
+
+
 
 app.get("/api/topics", getTopics);
 
