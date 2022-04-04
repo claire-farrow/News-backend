@@ -23,6 +23,14 @@ Dependencies are:
 - supertest (dev dependency)
 - dotenv (dev dependency)
 
+Installation instruction:
+- npm install
+- npm setup-dbs
+- npm seed
+- npm seed:prod
+- npm test
+- npm start
+
 # Minimum versions
 - Node.js 16.14.0
 - Postgresql - 14.1
