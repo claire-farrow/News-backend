@@ -19,7 +19,7 @@
     }
   },
   "GET /api/articles": {
-    "description": "serves an array of all topics",
+    "description": "serves an array of all articles",
     "queries": ["author", "topic", "sort_by", "order"],
     "exampleResponse": {
       "articles": [
@@ -28,24 +28,75 @@
           "topic": "cooking",
           "author": "weegembump",
           "body": "Text from the article..",
-          "created_at": 1527695953341
+          "created_at": 1527695953341,
+          "votes": 0
         }
       ]
     }
   },
-  "GET /api/comments": {
-    "description": "serves an array of all comments",
-    "queries": ["author", "article_id", "votes"],
+  "GET /api/articles/:article_id": {
+    "description": "serves an array of a single article",
+    "queries": ["article_id"],
     "exampleResponse": {
       "articles": [
         {
-          "body": "Lobster pot",
-          "votes": 0,
-          "author": "icellusedkars",
-          "article_id":  1,
-          "created_at": 1589577540000
+          "title": "Seafood substitutions are increasing",
+          "topic": "cooking",
+          "author": "weegembump",
+          "body": "Text from the article..",
+          "created_at": 1527695953341,
+          "votes": 0
         }
       ]
     }
+  },
+  "PATCH /api/articles": {
+    "description": "accepts an object of inc_votes with incremenets or decrements the votes",
+    "exampleResponse": {
+      "articles": [
+        {
+          "title": "Seafood substitutions are increasing",
+          "topic": "cooking",
+          "author": "weegembump",
+          "body": "Text from the article..",
+          "created_at": 1527695953341,
+          "votes": 1
+        }
+      ]
+    }
+  },
+  "GET /api/articles/:article_id/comments": {
+    "description": "serves an array of all comments",
+    "queries": ["author", "article_id", "votes"],
+    "exampleResponse": {
+      "comments": [
+        {
+          "votes": 0,
+          "author": "icellusedkars",
+          "article_id":  1,
+          "created_at": 1589577540000,
+          "body":"Text from the comment.."
+        }
+      ]
+    }
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "serves an array of a comment",
+    "queries": ["username", "body"],
+    "exampleResponse": {
+      "comments": [
+        {
+          "votes": 0,
+          "author": "icellusedkars",
+          "article_id":  1,
+          "created_at": 1589577540000,
+          "body":"Text from the comment.."
+        }
+      ]
+    }
+  },
+  "DELETE /api/comments": {
+    "description": "deletes an array of a comment",
+    "queries": ["comment_id"]
   }
 }
